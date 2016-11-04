@@ -44,34 +44,47 @@ app.get("/api/get-cards", function(req, res) {
 	});
 });
 
-app.post("/api/delete-card", function(req, res) {
-	var card = req.body.card;
-	console.log(card);
-	storage.deleteCard(card, (success) => {
-			if (success) {
-				res.send({status: "success", message: "Card deleted"});
-			} else {
-				res.send({status: "error", message: "Could not delete card"});
-			}
-		});
+app.get("/api/get-card/:id", function(req, res) {
+	var cardId = req.params.id;
+	storage.getCardById(cardId, (card) => {
+		res.send(card);
+	});
 });
 
-// app.post("/api", function(req, res) {
-// 	var person = req.body.person;
-// 	storage.addPerson(person, (success) => {
-// 			if (success) {
-// 				res.send({status: "success", message: "Person added!"});
-// 			} else {
-// 				res.send({status: "error", message: "Could not add person"});
-// 			}
-// 		});
-// });
+app.post("/api/delete-card", function(req, res) {
+	var card = req.body.card;
+	
+	storage.deleteCard(card, (success) => {
+		if (success) {
+			res.send({status: "success", message: "Card deleted"});
+		} else {
+			res.send({status: "error", message: "Could not delete card"});
+		}
+	});
+});
 
-// app.get("/api", function(req, res) {
-// 	storage.getPeople((people) => {
-// 		res.send(people);
-// 	});
-// });
+app.post("/api/add-contributor/:id", function(req, res) {
+	var cardId = req.params.id;
+	var newContributor = req.body.newContributor;
+	storage.addContributor(newContributor, cardId, (card) => {
+		console.log("server: add contrib", card);
+		res.send(card);
+	});
+});
+
+app.post("/api/remove-contributor/:id", function(req, res) {
+	var cardId = req.params.id;
+	var contributor = req.body;
+	console.log(cardId);
+	console.log(contributor);
+	storage.removeContributor(contributor, cardId, (card) => {
+		if (card) {
+			res.send(card);
+		} else {
+			res.send({status: "error", message: "Could not delete card"});
+		}
+	});
+});
 
 
 app.use(function(req, res, next) {

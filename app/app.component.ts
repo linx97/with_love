@@ -6,8 +6,6 @@ import { Component, OnInit } from '@angular/core';
 		<nav>
 			<a routerLink="/cards" routerLinkActive="active">Home</a>
 		</nav>
-
-		<h1>Homepage</h1>
 		
 		<router-outlet></router-outlet>
 		
