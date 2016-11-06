@@ -86,6 +86,21 @@ app.post("/api/remove-contributor/:id", function(req, res) {
 	});
 });
 
+app.post("/api/add-redcording/:id", function(req, res) {
+	var cardId = req.params.id;
+	var contributor = req.body.contributor;
+	var recording = req.body.recording;
+	var info = {
+		cardId: cardId,
+		recording: recording,
+		info: info
+	};
+	storage.addRecording(info, (rec) => {
+		console.log("server: add record", recording);
+		res.send(card);
+	});
+});
+
 
 app.use(function(req, res, next) {
 	res.status(404);

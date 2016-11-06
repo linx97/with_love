@@ -21,7 +21,7 @@ import { Component, OnInit } from '@angular/core';
 	`,
 	styles: [`
 		.sidebar {
-			background-image: url("../images/celebrate.png");
+			background-image: url("../images/celebrate1.png");
 			background-size: cover;
 			float: left;
 			padding: 10px;
@@ -30,27 +30,28 @@ import { Component, OnInit } from '@angular/core';
 			left: 0;
 			bottom: 0;
 			height: 100%;
-			width: 28%;
+			width: 31%;
 			clear: both;
 			box-shadow: 4px 0 7px -2px #888;
 		}
 		img {
-			margin-top: 200px;
+			margin-top: 180px;
 			width: 68%;
-			margin-left:14%;
+			margin-left:16%;
 		}
 		p {
-			font-size: 1.25em;
-			padding: 0px 9px;
+			font-size: 1.35em;
+			padding: 0px 20px;
 			color: white;
 			font-family: 'Tornac Trial', sans-serif;
-			line-height: 1;
+			line-height: 1.2;
 			text-align: center;
 		}
 		nav {
+			margin-left: -10px;
+			width: 100%;
 			position: absolute;
 			bottom: 6%;
-			margin-left: 13%;
 			font-size: 1.2em;
 			text-decoration: none;
 			text-align: center;
@@ -74,7 +75,7 @@ import { Component, OnInit } from '@angular/core';
 			margin-left: 14%;
 		}
 		.wrapper {
-			margin-left: 39%;
+			margin-left: 41%;
 			margin-right: 10%;
 			padding: 60px 30px;
 		}

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ContributorService } from './contributor.service';
+import { CardDetailService } from './card-detail.service';
 import { CardDetailComponent } from './card-detail.component';
 import { Location } from '@angular/common';
 declare let navigator: any;
@@ -24,6 +25,7 @@ declare let MediaRecorder: any;
 	`
 })
 export class ContributorComponent {
+	public card;
 	private chunks: any[] = [];
 	private recorder;
 	private audio;
@@ -31,6 +33,7 @@ export class ContributorComponent {
 
 	constructor(
 		private contributorService: ContributorService,
+		private cardDetailService: CardDetailService,
 		private location: Location
 	) {}
 
@@ -48,6 +51,7 @@ export class ContributorComponent {
 			if (this.recorder.state === 'inactive') {
 				this.makeLink();
 				console.log("done recording?");
+				// this.contributorService.addRecording(this.chunks, this.card.id).subscribe();
 			}
 			this.chunks = [];
 		};

@@ -62,15 +62,28 @@ function Storage() {
 		);
 	};
 
-	this.addContributor = (newContributor, cardId, cb) => {
+	this.addContributor = (reecording, cardId, cb) => {
 		newContributor.id = Math.floor(Math.random() * 10000000);
-		var index;
-		for(var i = 0; i < cards.length; i++) {
-			if(cards[i].id == cardId) {
-				index = i;
-			} 
-		}
+		var index = getIndex(cards, cardId);
 		cards[index].contributors.push(newContributor);
+		fs.writeFile(
+			"./data.json",
+			JSON.stringify(cards),
+			(err) => {
+				if (err) {
+					console.log("Error writing cards to file");
+					cb(false);
+					return;
+				}
+				cb(cards[i - 1]);
+			}
+		);
+	};
+
+	this.addRecording = (item, cb) => {
+		var cardIndex = getIndex(cards, item.cardId);
+		var contributorIndex = getIndex(cards[cardIndex].contributors, item.contributor);
+		cards[cardIndex].contributors[contributorIndex].message = recording;
 		fs.writeFile(
 			"./data.json",
 			JSON.stringify(cards),
@@ -120,6 +133,16 @@ function Storage() {
 			} 
 		}
 		cb(null);
+	};
+
+	getIndex = (array, thing) => {
+		var index;
+		for(var i = 0; i < array.length; i++) {
+			if(array[i].id == thing) {
+				index = i;
+			} 
+		}
+		return index;
 	};
 }
 

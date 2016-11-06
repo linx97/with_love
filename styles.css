@@ -15,7 +15,7 @@ button {
    background: -moz-linear-gradient(top, #6b8a9e, #4c6f87);
    background: -ms-linear-gradient(top, #6b8a9e, #4c6f87);
    background: -o-linear-gradient(top, #6b8a9e, #4c6f87);
-   padding: 8px 16px;
+   padding: 6px 14px;
    -webkit-border-radius: 3px;
    -moz-border-radius: 3px;
    border-radius: 3px;
