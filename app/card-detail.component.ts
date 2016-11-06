@@ -20,17 +20,18 @@ import { UserHomeService } from './user-home.service';
 		<button class="add-new contributor" (click)="addNewContributor()">Add to Card</button>
 
 		<button class="delete-card" (click)="deleteCard(card)">Delete</button>
+		<button class="listen" (click)="goListen()">Listen!</button>
 		<button (click)="goBack()">Back</button>
 	</div>
 	`
 })
 export class CardDetailComponent {
-	private card: Object;
+	public card;
 	
 	private newContributor = {
 		name: '',
 		id: '',
-		message: ''
+		message: {}
 	};
 
 	constructor(
@@ -61,7 +62,7 @@ export class CardDetailComponent {
 		this.router.navigate(['/cards']);	
 	}
 
-	goBack() {
+	public goBack() {
 		this.location.back();
 	}
 
@@ -69,7 +70,6 @@ export class CardDetailComponent {
 		this.route.params.forEach((params: Params) => {
 			let cardId = parseInt(params['id'], 10);
 			this.cardDetailService.addNewContributor(this.newContributor, cardId).subscribe(() => {
-				console.log(this.newContributor);
 				// this.cardDetailService.getContributors().subscribe();
 				this.newContributor.name = "";
 				this.cardDetailService.getCard(cardId).subscribe((card) => {
@@ -80,7 +80,6 @@ export class CardDetailComponent {
 	}
 
 	onSelect(contributor): void {
-		console.log(contributor.id);
 		this.router.navigate(['/record', contributor.id]);
 	}
 
@@ -92,5 +91,9 @@ export class CardDetailComponent {
 			});
 		});
 		
+	}
+
+	goListen() {
+		this.router.navigate(['/listen', this.card.id]);
 	}
 }

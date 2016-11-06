@@ -22,7 +22,9 @@ export class UserHomeService {
 	}	
 
 	deleteCard(card: Object) {
-		this.apiService.postObs("/api/delete-card", card).do((cards) => {
+		this.apiService.postObs("/api/delete-card", {
+			card: card
+		}).do((cards) => {
 			this.cards = cards;
 		});
 	}

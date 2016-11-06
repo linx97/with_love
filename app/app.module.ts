@@ -11,6 +11,8 @@ import { CardDetailComponent } from './card-detail.component';
 import { CardDetailService } from './card-detail.service';
 import { ContributorComponent } from './contributor.component';
 import { ContributorService } from './contributor.service';
+import { ListenService} from './listen.service';
+import { ListenComponent } from './listen.component';
 
 
 @NgModule({
@@ -18,10 +20,11 @@ import { ContributorService } from './contributor.service';
 			{path: '', redirectTo: '/cards', pathMatch: 'full'},
 			{path: 'cards', component: UserHomeComponent },
 			{path: 'cards/:id', component: CardDetailComponent },
-			{path: 'record/:id', component: ContributorComponent }
+			{path: 'record/:id', component: ContributorComponent },
+			{path: 'listen/:id', component: ListenComponent }
 		]) ],
-	declarations: [ AppComponent, UserHomeComponent, ContributorComponent, CardDetailComponent ],
-	providers: [ ApiService, UserHomeService, CardDetailService, ContributorService ],
+	declarations: [ AppComponent, UserHomeComponent, ContributorComponent, CardDetailComponent, ListenComponent ],
+	providers: [ ApiService, UserHomeService, CardDetailService, ContributorService, ListenService ],
 	bootstrap: [ AppComponent ]
 })
 export class AppModule { }

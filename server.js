@@ -53,7 +53,7 @@ app.get("/api/get-card/:id", function(req, res) {
 
 app.post("/api/delete-card", function(req, res) {
 	var card = req.body.card;
-	
+	console.log(card);
 	storage.deleteCard(card, (success) => {
 		if (success) {
 			res.send({status: "success", message: "Card deleted"});

@@ -5,17 +5,47 @@ import { Router } from '@angular/router';
 @Component({
 	selector: 'user-home',
 	template: `
-		<div>
-			Your saved cards:
+	<div>
+		<h1>Your saved cards:</h1>
+
+		<div class="holder">
+			
 			<div class="card-div" 
 			*ngFor="let c of this.userHomeService.cards">
-				<h4 (click)="onSelect(c)">{{c.title}}</h4>
+				<h3 (click)="onSelect(c)">{{c.title}}</h3>
 			</div>
 		</div>
  
-		<input type="text" class="new-card-input" placeholder="title" [(ngModel)]="newCard.title" (keyup)="onKeyUp($event)">
-		<button class="create-new-card" (click)="createNewCard()">Create!</button>
-	`
+		<div class="create">
+			<input type="text" class="new-card-input" placeholder="title" [(ngModel)]="newCard.title" (keyup)="onKeyUp($event)">
+			<button (click)="createNewCard()">Create!</button>
+		</div>
+	</div>
+	`,
+	styles: [`
+		h1 {
+			padding-left: 30px;
+			font-size: 2.3em;
+			font-weight: bold;
+		}
+		.holder {
+			border: 4px solid #EAEAEA;
+			border-radius: 5px;
+			margin: -20px 0 50px 0;
+			padding-left: 30px;
+			height: 400px;
+			overflow: scroll;
+			box-shadow: inset 0 0 10px #EAEAEA;
+
+		}
+		.create {
+			position: absolute;
+			right: 12%;
+		}
+		button {
+			margin-left: 20px;
+		}
+	`]
 })
 export class UserHomeComponent {
 	private newCard = {

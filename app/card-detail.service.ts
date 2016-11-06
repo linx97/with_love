@@ -27,4 +27,5 @@ export class CardDetailService {
 			this.card = card;
 		});
 	}
+	
 }
