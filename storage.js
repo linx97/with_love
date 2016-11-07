@@ -62,9 +62,14 @@ function Storage() {
 		);
 	};
 
-	this.addContributor = (reecording, cardId, cb) => {
+	this.addContributor = (newContributor, cardId, cb) => {
 		newContributor.id = Math.floor(Math.random() * 10000000);
-		var index = getIndex(cards, cardId);
+		var index;
+		for(var i = 0; i < cards.length; i++) {
+			if(cards[i].id == cardId) {
+				index = i;
+			} 
+		}
 		cards[index].contributors.push(newContributor);
 		fs.writeFile(
 			"./data.json",
@@ -82,7 +87,9 @@ function Storage() {
 
 	this.addRecording = (item, cb) => {
 		var cardIndex = getIndex(cards, item.cardId);
+		console.log(cardIndex);
 		var contributorIndex = getIndex(cards[cardIndex].contributors, item.contributor);
+		console.log(contributorIndex);
 		cards[cardIndex].contributors[contributorIndex].message = recording;
 		fs.writeFile(
 			"./data.json",

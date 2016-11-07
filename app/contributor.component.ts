@@ -2,17 +2,17 @@ import { Component } from '@angular/core';
 import { ContributorService } from './contributor.service';
 import { CardDetailService } from './card-detail.service';
 import { CardDetailComponent } from './card-detail.component';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
 declare let navigator: any;
 declare let MediaRecorder: any;
+
 
 
 @Component({
 	selector: 'contributor',
 	template: `
 		<h1>Record Message</h1>
-
-		<button (click)='requestStream()'>Request Stream</button>
 
 		<button (click)='start()'>Start</button>
 		<button (click)='stop()'>Stop</button>
@@ -25,7 +25,6 @@ declare let MediaRecorder: any;
 	`
 })
 export class ContributorComponent {
-	public card;
 	private chunks: any[] = [];
 	private recorder;
 	private audio;
@@ -34,8 +33,14 @@ export class ContributorComponent {
 	constructor(
 		private contributorService: ContributorService,
 		private cardDetailService: CardDetailService,
-		private location: Location
+		private location: Location,
+		private route: ActivatedRoute,
+		private router: Router,
 	) {}
+
+	ngOnInit() {
+		this.requestStream();
+	}
 
 	requestStream() {
 		let audio = {
@@ -49,11 +54,17 @@ export class ContributorComponent {
 		this.recorder.ondataavailable = (evt) => {
 			this.chunks.push(evt.data);
 			if (this.recorder.state === 'inactive') {
-				this.makeLink();
+				this.route.params.forEach((params: Params) => {
+					let contributorId = params['id'];
+
+					this.contributorService.addRecording(this.chunks, contributorId, this.cardDetailService.card.id).subscribe((recording) => {
+						
+					});
+				});
+				
 				console.log("done recording?");
-				// this.contributorService.addRecording(this.chunks, this.card.id).subscribe();
+				
 			}
-			this.chunks = [];
 		};
 	}).catch((err) => {
 		console.log(err);
@@ -61,6 +72,8 @@ export class ContributorComponent {
 	}
 
 	start() {
+		console.log(this.recorder);
+		
 		this.chunks = [];
 		this.recorder.start();
 	}
@@ -70,16 +83,7 @@ export class ContributorComponent {
 		console.log(this.chunks);
 	}
 
-	makeLink() {
-		let blob = new Blob(this.chunks, {type: this.audio.type })
-		, url = URL.createObjectURL(blob)
-		, mt = document.createElement(this.audio.tag)
-		, hf = document.createElement('a')
-		;
-		
-		hf.download = `${this.counter++}${this.audio.ext}`;
-		hf.innerHTML = `donwload ${hf.download}`;
-	}
+	
 
 	goBack() {
 		this.location.back();

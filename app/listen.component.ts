@@ -6,7 +6,15 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 	selector: 'listen',
 	template: `
 		<h1>Play Your Greeting!</h1>
-	`
+
+		<img src="../images/play.svg"> 
+		<audio controls src="../music/06 What Is The Light_.mp3">
+	`,
+	styles: [`
+			img {
+				width: 30%;
+			}
+	`]
 })
 export class ListenComponent {
 
@@ -15,4 +23,8 @@ export class ListenComponent {
 		private route: ActivatedRoute,
 		private router: Router
 		) {}
+
+	playMusic(event) {
+		event.play();
+	}
 }

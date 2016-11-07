@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-
+import { Card } from './card';
 
 
 @Injectable()
 export class CardDetailService {
 	public contributors: string[];
-	public card: Object;
+	public card: Card;
 
 	constructor(private apiService: ApiService) {}
 

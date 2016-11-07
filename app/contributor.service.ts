@@ -5,9 +5,10 @@ import { ApiService } from './api.service';
 export class ContributorService {
 	constructor(private apiService: ApiService) {}
 
-	addRecording(chunks, cardId): any {
-		return this.apiService.postObs("/api/add-recording/" + cardId, {
-			recording: chunks
+	addRecording(chunks, contributorId, cardId): any {
+		return this.apiService.postObs("/api/add-recording/" + contributorId, {
+			recording: chunks,
+			cardId: cardId
 		});
 	}
 }

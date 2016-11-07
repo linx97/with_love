@@ -9,11 +9,12 @@ import { UserHomeService } from './user-home.service';
 	template: `
 	<div *ngIf="card">
 		<h2>{{card.title}}</h2>
-		<h3>Add People</h3>
-
-		<div *ngFor="let p of card.contributors">
-			<h4 (click)="onSelect(p)">{{p.name}}</h4>
-			<button (click)="removeContributor(p)">Remove</button>
+	
+		<div class="holder">
+			<div *ngFor="let p of card.contributors">
+				<h4 (click)="onSelect(p)">{{p.contributor.name}}</h4>
+				<img class="trash" src="../images/trash.svg" (click)="removeContributor(p)">
+			</div>
 		</div>
 
 		<input type="text" class="new-contributor" placeholder="name" [(ngModel)]="newContributor.name" (keyup)="onKeyUp($event)">
@@ -23,14 +24,55 @@ import { UserHomeService } from './user-home.service';
 		<button class="listen" (click)="goListen()">Listen!</button>
 		<button (click)="goBack()">Back</button>
 	</div>
-	`
+	`,
+	styles: [`
+		.wrapper {
+			margin-left: 40px;
+		}
+		h2 {
+			margin: 40px 0 20px 37px;
+			font-size: 3em;
+		}
+		.holder {
+			height: 370px;
+			width: 88%;
+			border: 3px solid #CCCCCC;
+			box-shadow: inset 0 0 10px #BFBFBF;
+			margin-bottom: 20px;
+			border-radius: 7px;
+			overflow: scroll;
+			padding: 15px 0;
+		}
+		.holder>div {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+		.holder>div:hover {
+			cursor:pointer;
+		}
+		h4 {
+			display: inline-block;
+			margin: 5px 0 5px 30px;
+			font-size: 1.4em;
+		}
+		.listen {
+			margin: auto;
+		}
+		.trash {
+			width: 25px;
+			position: absolute;
+			right: 30px;
+
+		}
+	`]
 })
 export class CardDetailComponent {
 	public card;
 	
 	private newContributor = {
 		name: '',
-		id: '',
 		message: {}
 	};
 
@@ -50,15 +92,16 @@ export class CardDetailComponent {
 
 	ngOnInit() {
 		this.route.params.forEach((params: Params) => {
-			let cardId = parseInt(params['id'], 10);
+			let cardId = params['id'];
 			this.cardDetailService.getCard(cardId).subscribe((card) => {
 				this.card = card;
+				console.log(card);
 			});
 		});
 	}
 
 	deleteCard(card) {
-		this.userHomeService.deleteCard(card);
+		this.userHomeService.deleteCard(card).subscribe();
 		this.router.navigate(['/cards']);	
 	}
 
@@ -68,7 +111,8 @@ export class CardDetailComponent {
 
 	addNewContributor() {
 		this.route.params.forEach((params: Params) => {
-			let cardId = parseInt(params['id'], 10);
+			let cardId = params['id'];
+			console.log(cardId);
 			this.cardDetailService.addNewContributor(this.newContributor, cardId).subscribe(() => {
 				// this.cardDetailService.getContributors().subscribe();
 				this.newContributor.name = "";
@@ -85,7 +129,7 @@ export class CardDetailComponent {
 
 	removeContributor(contributor) {
 		this.route.params.forEach((params: Params) => {
-			let cardId = parseInt(params['id'], 10);
+			let cardId = params['id'];
 			this.cardDetailService.removeContributor(contributor, cardId).subscribe((card) => {
 				this.card = card;
 			});

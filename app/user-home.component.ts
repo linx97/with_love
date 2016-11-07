@@ -6,10 +6,9 @@ import { Router } from '@angular/router';
 	selector: 'user-home',
 	template: `
 	<div>
-		<h1>Your saved cards:</h1>
-
 		<div class="holder">
-			
+			<h2 *ngIf="finished && !this.userHomeService.cards">You haven't created any cards.</h2>
+
 			<div class="card-div" 
 			*ngFor="let c of this.userHomeService.cards">
 				<h3 (click)="onSelect(c)">{{c.title}}</h3>
@@ -29,16 +28,16 @@ import { Router } from '@angular/router';
 			font-weight: bold;
 		}
 		.holder {
-			margin: -20px 0 40px 0;
-			padding: 5px 45px;
-			height: 370px;
+			margin: 45px 0 25px 0;
+			padding: 5px 25px;
+			height: 450px;
 			overflow: scroll;
 			border: 20px solid transparent;
 			border-radius: 7px;
 		}
 		.card-div {
-			width: 95%;
-			height: 355px;
+			width: 87%;
+			height: 430px;
 			background-image: url("../images/card.jpg");
 			background-size: cover;
 			margin-bottom: 15px;
@@ -46,6 +45,12 @@ import { Router } from '@angular/router';
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
+			padding-left: 38px;
+			padding-right: 10px
+			margin-top: 20px;
+		}
+		.card-div:hover {
+			cursor:pointer;
 		}
 		.card-div h3 {
 			font-size: 3.7em;
@@ -53,26 +58,53 @@ import { Router } from '@angular/router';
 				-webkit-background-clip: text;
 				-webkit-text-fill-color: transparent;
 			font-family: 'Tornac Trial', sans-serif;
-			width: 100%;
+			width: 93%;
 			text-align: center;
 			text-shadow: 3px 2px -9px rgba(0, 0, 0, .3);
 		}
 		.create {
 			position: absolute;
 			right: 12%;
+			margin-left: 30px;
 		}
 		button {
-			margin-left: 20px;
+			height: 46px;
+			width: 319px;
+			border-radius: 5px;
+			text-align: center;
+			margin: 8px;
+			font: 20px Catamaran;
+			color: white;
+			background-color: #6f8fbf;
+			box-shadow: none;
+			border: none;
+			margin-right: -30px;
+		}
+		button:hover {
+			color: #6f8fbf;
+			background-color: white;
+			border: 2px solid #6f8fbf;
+		}
+		input {
+			outline: none;
+			height: 46px;
+			width: 319px;
+			margin: 8px;
+			border-radius: 5px;
+			padding-left: 30px;
+			border-color: #C4C4C4;
+			font: 20px Catamaran;
+			border-style: solid;
 		}
 	`]
 })
 export class UserHomeComponent {
 	private newCard = {
 		title: '',
-		id: '',
 		contributors: []
 	};
 
+	private finished: boolean = false;
 
 	constructor(private userHomeService: UserHomeService, private router: Router) {}
 
@@ -84,6 +116,8 @@ export class UserHomeComponent {
 
 	ngOnInit(): void {
 		this.userHomeService.getCards().subscribe();
+		this.finished = true;
+		console.log(!this.userHomeService.cards);
 	}
 
 	createNewCard() {
@@ -91,10 +125,12 @@ export class UserHomeComponent {
 			console.log(this.newCard);
 			this.userHomeService.getCards().subscribe();
 			this.newCard.title = "";
+			this.finished = true;
+			console.log(this.finished);
 		}) ;	
 	}
 
 	onSelect(card): void {
-		this.router.navigate(['/cards', card.id]);
+		this.router.navigate(['/cards', card._id]);
 	}
 }

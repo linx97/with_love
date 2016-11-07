@@ -76,8 +76,8 @@ import { Component, OnInit } from '@angular/core';
 		}
 		.wrapper {
 			margin-left: 41%;
-			margin-right: 10%;
-			padding: 60px 30px;
+			margin-right: 6%;
+			padding: 20px;
 		}
 
 		@media (max-width: 690px) {
