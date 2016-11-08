@@ -19,12 +19,16 @@ export class CardDetailService {
 	addNewContributor(newContributor, cardId) {
 		return this.apiService.postObs("/api/add-contributor/" + cardId, {
 			newContributor: newContributor
+		}).do((res) => {
+			this.getCard(cardId).subscribe();
 		});
 	}
 
 	removeContributor(contributor, cardId) {
-		return this.apiService.postObs("/api/remove-contributor/" + cardId, contributor).do((card) => {
-			this.card = card;
+		return this.apiService.postObs("/api/remove-contributor/" + cardId, {
+			contributor: contributor
+		}).do((res) => {
+			this.getCard(cardId).subscribe();
 		});
 	}
 	

@@ -7,11 +7,11 @@ import { UserHomeService } from './user-home.service';
 @Component({
 	selector: 'card-detail',
 	template: `
-	<div *ngIf="card">
-		<h2>{{card.title}}</h2>
+	<div *ngIf="this.cardDetailService.card">
+		<h2>{{this.cardDetailService.card.title}}</h2>
 	
 		<div class="holder">
-			<div *ngFor="let p of card.contributors">
+			<div *ngFor="let p of this.cardDetailService.card.contributors">
 				<h4 (click)="onSelect(p)">{{p.contributor.name}}</h4>
 				<img class="trash" src="../images/trash.svg" (click)="removeContributor(p)">
 			</div>
@@ -68,9 +68,7 @@ import { UserHomeService } from './user-home.service';
 		}
 	`]
 })
-export class CardDetailComponent {
-	public card;
-	
+export class CardDetailComponent {	
 	private newContributor = {
 		name: '',
 		message: {}
@@ -93,10 +91,7 @@ export class CardDetailComponent {
 	ngOnInit() {
 		this.route.params.forEach((params: Params) => {
 			let cardId = params['id'];
-			this.cardDetailService.getCard(cardId).subscribe((card) => {
-				this.card = card;
-				console.log(card);
-			});
+			this.cardDetailService.getCard(cardId).subscribe();
 		});
 	}
 
@@ -116,28 +111,23 @@ export class CardDetailComponent {
 			this.cardDetailService.addNewContributor(this.newContributor, cardId).subscribe(() => {
 				// this.cardDetailService.getContributors().subscribe();
 				this.newContributor.name = "";
-				this.cardDetailService.getCard(cardId).subscribe((card) => {
-					this.card = card;
-				});
+				this.cardDetailService.getCard(cardId).subscribe();
 			}) ;
 		});
 	}
 
 	onSelect(contributor): void {
-		this.router.navigate(['/record', contributor.id]);
+		this.router.navigate(['/record', contributor.contributor._id]);
 	}
 
 	removeContributor(contributor) {
 		this.route.params.forEach((params: Params) => {
 			let cardId = params['id'];
-			this.cardDetailService.removeContributor(contributor, cardId).subscribe((card) => {
-				this.card = card;
-			});
-		});
-		
+			this.cardDetailService.removeContributor(contributor, cardId).subscribe();
+		});	
 	}
 
 	goListen() {
-		this.router.navigate(['/listen', this.card.id]);
+		this.router.navigate(['/listen', this.cardDetailService.card.id]);
 	}
 }
