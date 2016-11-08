@@ -1,5 +1,5 @@
 export class Card {
 		title: string;
-		id: string;
+		_id: string;
 		contributors: string[];
 };

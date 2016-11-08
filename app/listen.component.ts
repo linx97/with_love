@@ -7,7 +7,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 	template: `
 		<h1>Play Your Greeting!</h1>
 
-		<img src="../images/play.svg"> 
+		<img src="../images/play.svg" (click)="playMusic($event)"> 
 		<audio controls src="../music/06 What Is The Light_.mp3">
 	`,
 	styles: [`
@@ -18,6 +18,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class ListenComponent {
 
+
 	constructor(
 		private listenService: ListenService, 
 		private route: ActivatedRoute,
@@ -25,6 +26,7 @@ export class ListenComponent {
 		) {}
 
 	playMusic(event) {
-		event.play();
+		console.log(event.target);
+		event.target.play();
 	}
 }

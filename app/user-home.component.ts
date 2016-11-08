@@ -117,16 +117,13 @@ export class UserHomeComponent {
 	ngOnInit(): void {
 		this.userHomeService.getCards().subscribe();
 		this.finished = true;
-		console.log(!this.userHomeService.cards);
 	}
 
 	createNewCard() {
 		this.userHomeService.createNewCard(this.newCard).subscribe(() => {
-			console.log(this.newCard);
 			this.userHomeService.getCards().subscribe();
 			this.newCard.title = "";
 			this.finished = true;
-			console.log(this.finished);
 		}) ;	
 	}
 

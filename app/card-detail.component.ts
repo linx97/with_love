@@ -128,6 +128,6 @@ export class CardDetailComponent {
 	}
 
 	goListen() {
-		this.router.navigate(['/listen', this.cardDetailService.card.id]);
+		this.router.navigate(['/listen', this.cardDetailService.card._id]);
 	}
 }
