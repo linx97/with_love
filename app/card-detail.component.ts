@@ -12,7 +12,7 @@ import { UserHomeService } from './user-home.service';
 	
 		<div class="holder">
 			<div *ngFor="let p of this.cardDetailService.card.contributors">
-				<h4 (click)="onSelect(p)">{{p.contributor.name}}</h4>
+				<h4 (click)="onSelect(p)">{{p.name}}</h4>
 				<img class="trash" src="../images/trash.svg" (click)="removeContributor(p)">
 			</div>
 		</div>
@@ -117,7 +117,7 @@ export class CardDetailComponent {
 	}
 
 	onSelect(contributor): void {
-		this.router.navigate(['/record', contributor.contributor._id]);
+		this.router.navigate(['/record', contributor._id]);
 	}
 
 	removeContributor(contributor) {
