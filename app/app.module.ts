@@ -13,7 +13,13 @@ import { ContributorComponent } from './contributor.component';
 import { ContributorService } from './contributor.service';
 import { ListenService} from './listen.service';
 import { ListenComponent } from './listen.component';
+import { MusicSelector } from './music-selector';
+import { ValueProvider } from '@angular/core';
 
+const WINDOW_PROVIDER: ValueProvider = {
+	provide: Window,
+	useValue: window
+};
 
 @NgModule({
 	imports: [ BrowserModule, FormsModule, HttpModule, RouterModule.forRoot([
@@ -23,8 +29,8 @@ import { ListenComponent } from './listen.component';
 			{path: 'record/:id', component: ContributorComponent },
 			{path: 'listen/:id', component: ListenComponent }
 		]) ],
-	declarations: [ AppComponent, UserHomeComponent, ContributorComponent, CardDetailComponent, ListenComponent ],
-	providers: [ ApiService, UserHomeService, CardDetailService, ContributorService, ListenService ],
+	declarations: [ AppComponent, UserHomeComponent, ContributorComponent, CardDetailComponent, ListenComponent, MusicSelector ],
+	providers: [ ApiService, UserHomeService, CardDetailService, ContributorService, ListenService, WINDOW_PROVIDER ],
 	bootstrap: [ AppComponent ]
 })
 export class AppModule { }

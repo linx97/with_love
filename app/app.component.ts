@@ -75,7 +75,7 @@ import { Component, OnInit } from '@angular/core';
 			margin-left: 14%;
 		}
 		.wrapper {
-			margin-left: 41%;
+			margin-left: 43%;
 			margin-right: 6%;
 			padding: 20px;
 		}

@@ -28,7 +28,7 @@ import { Router } from '@angular/router';
 			font-weight: bold;
 		}
 		.holder {
-			margin: 45px 0 25px 0;
+			margin: 45px -60px 25px 0;
 			padding: 5px 25px;
 			height: 450px;
 			overflow: scroll;
@@ -36,7 +36,7 @@ import { Router } from '@angular/router';
 			border-radius: 7px;
 		}
 		.card-div {
-			width: 87%;
+			width: 85%;
 			height: 430px;
 			background-image: url("../images/card.jpg");
 			background-size: cover;

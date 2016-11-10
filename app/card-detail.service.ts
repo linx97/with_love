@@ -7,6 +7,7 @@ import { Card } from './card';
 export class CardDetailService {
 	public contributors: string[];
 	public card: Card;
+	public songFile;
 
 	constructor(private apiService: ApiService) {}
 
@@ -21,6 +22,19 @@ export class CardDetailService {
 			newContributor: newContributor
 		}).do((res) => {
 			this.getCard(cardId).subscribe();
+		});
+	}
+
+	setSong(song, cardId) {
+		if (song === "none" || song === 'undefined') {
+				this.songFile = false;
+			} else {
+				this.songFile = "../music/" +  song + ".mp3";
+			}
+		return this.apiService.postObs("/api/set-song/" + cardId, {
+			song: this.songFile
+		}).do((card) => {
+			this.card.song = this.songFile;
 		});
 	}
 

@@ -8,8 +8,6 @@ declare let navigator: any;
 declare let MediaRecorder: any;
 declare let BinaryClient: any;
 
-
-
 @Component({
 	selector: 'contributor',
 	template: `
@@ -31,6 +29,8 @@ export class ContributorComponent {
 	private audio;
 	private counter = 1;
 	private Stream;
+	private recording = false;
+	private contributorId;
 
 	constructor(
 		private contributorService: ContributorService,
@@ -38,19 +38,22 @@ export class ContributorComponent {
 		private location: Location,
 		private route: ActivatedRoute,
 		private router: Router,
+		private window: Window
 	) {}
 
 	ngOnInit() {
-		this.requestStream();
+		this.route.params.forEach((params: Params) => {
+			this.contributorId = params['id'];
+			console.log(this.contributorId);
+		});
+
 		let client = new BinaryClient('ws://localhost:9001');
 
-				client.on('open', function() {
-					// for the sake of this example let's put the stream in the window
-					this.Stream = client.createStream();
-				});
-	}
+		client.on('open', () => {
+			console.log(this);
+			this.Stream = client.createStream({name: this.contributorId});
+		});
 
-	requestStream() {
 		let audio = {
 			tag: 'audio',
 			type: 'audio/ogg',
@@ -59,49 +62,52 @@ export class ContributorComponent {
 		};
 		let context = new AudioContext();
 		
-		navigator.mediaDevices.getUserMedia(audio.gUM).then(stream => {
-			this.recorder =  new MediaRecorder(stream);
-			this.recorder.ondataavailable = (evt) => {
-
-				
-				let audioInput = context.createMediaStreamSource(stream);
-				let bufferSize = 2048;
-				// create a javascript node
-				let recorder = context.createScriptProcessor(1024, 1, 1);
-				// specify the processing function
-				recorder.onaudioprocess = this.recorderProcess;
-				// connect stream to our recorder
-				audioInput.connect(recorder);
-				// connect our recorder to the previous destination
-				recorder.connect(context.destination);
-
-				this.chunks.push(evt.data);
-				if (this.recorder.state === 'inactive') {
-
-					
-					
-					console.log("done recording?");
-					
-				}
-			};
-		});
+		if (!navigator.getUserMedia) {
+			navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+			navigator.mozGetUserMedia || navigator.msGetUserMedia;
+		}
+     
+		if (navigator.getUserMedia) {
+			navigator.getUserMedia({audio: true }, this.success.bind(this), function(e) {
+				alert('Error capturing audio.');
+			});
+			} else {
+				alert('getUserMedia not supported in this browser.');
+			}
 	}
 
 	start() {
-		console.log(this.recorder);
-		
-		this.chunks = [];
-		this.recorder.start();
+		this.recording = true;
 	}
 
 	stop() {
-		this.recorder.stop();
-		console.log(this.chunks);
+		this.recording = false;
+		console.log(this);
+		this.Stream.end();
 	}
 
 	recorderProcess(e) {
 		let left = e.inputBuffer.getChannelData(0);
 		this.Stream.write(this.convertFloat32ToInt16(left));
+	}
+
+	success(e) {
+		let context = new AudioContext();
+
+      // the sample rate is in context.sampleRate
+		let audioInput = context.createMediaStreamSource(e);
+
+		this.recorder = context.createScriptProcessor(2048, 1, 1);
+
+		this.recorder.onaudioprocess = (e) => {
+			if (!this.recording) { return; };
+			console.log ('recording');
+			var left = e.inputBuffer.getChannelData(0);
+			this.Stream.write(this.convertFloat32ToInt16(left));
+		};
+
+		audioInput.connect(this.recorder);
+		this.recorder.connect(context.destination); 
 	}
 
 	convertFloat32ToInt16(buffer) {
@@ -112,22 +118,6 @@ export class ContributorComponent {
 		}
 		return buf.buffer;
 	}
-
-
-	uploadAudio(mp3Data) {
-		let reader = new FileReader();
-		reader.onload = function(event){
-			var fd = new FormData();
-			var mp3Name = encodeURIComponent('audio_recording_' + new Date().getTime() + '.mp3');
-			console.log("mp3name = " + mp3Name);
-			fd.append('fname', mp3Name);
-			fd.append('data', (<any>(event.target)).result);
-
-
-		};
-		reader.readAsDataURL(mp3Data);
-	}
-
 	
 
 	goBack() {
