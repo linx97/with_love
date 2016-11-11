@@ -3,4 +3,5 @@ export class Card {
 		_id: string;
 		contributors: string[];
 		song: string;
+		songVolume: number;
 };

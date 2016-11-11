@@ -8,7 +8,7 @@ import { ListenService } from './listen.service';
 @Component({
 	selector: 'card-detail',
 	template: `
-	<div *ngIf="this.cardDetailService.card">
+	<div class="wrapper" *ngIf="this.cardDetailService.card">
 		<h2>{{this.cardDetailService.card.title}}</h2>
 	
 		<div class="holder">
@@ -27,26 +27,25 @@ import { ListenService } from './listen.service';
 					<option *ngFor="let song of songs" [value]="song">{{song}}</option>
 				</select>
 				Volume:
-				<input id="slider" type="range" min="0" max="1" step="10" (change)="songVolume" />
+				<input id="slider" type="range" min="1" max="9" step="1" (change)="setVolume($event)" />
 			</div>
 			<button (click)="goBack()">go back</button>
 			<button class="delete-card" (click)="deleteCard(card)">delete card</button>
 		</div>
 		
-		<h3>listen!</h3>
-		<button class="listen" (click)="goListen()"></button>
+		<img class="listen" src="../images/headphones.png" (click)="goListen()">
 	</div>
 	`,
 	styles: [`
 		.wrapper {
-			margin-left: 40px;
+			margin-left: -50px;
 		}
 		h2 {
-			margin: 40px 0 20px 0;
+			margin: 30px 0 15px 20px;
 			font-size: 2.7em;
 		}
 		.holder {
-			height: 250px;
+			height: 220px;
 			width: 88%;
 			border: 3px solid #CCCCCC;
 			box-shadow: inset 0 0 10px #BFBFBF;
@@ -72,6 +71,7 @@ import { ListenService } from './listen.service';
 		.buttons {
 			margin-right: 80px;
 			font-size: 1.2em;
+			position: relative;
 		}
 		.buttons button {
 			margin-left: 0;
@@ -80,28 +80,23 @@ import { ListenService } from './listen.service';
 		}
 		.buttons input {
 			margin-left: 0;
-			width: 260px;
+			width: 240px;
 		}
 		select {
-			margin: 10px 15px 15px 15px;
+			margin: 10px 15px 15px 10px;
 			width: 170px;
 			font: 14px Catamaran;
 			height: 36px;
 		}
 		.listen {
 			position: absolute;
-			opacity: 0.9;
-			bottom: -220px;
-			right: -120px;
-			transform: rotate(48deg);
-			height: 450px;
-			width: 300px;
-			font-weight: bold;
-			font-size: 1.1em;
-			background: linear-gradient(330deg, #8897BD 0%, #9D77A8 50%, #9188BF 100%);
+			opacity: 0.8;
+			bottom: 35px;
+			right: 35px;
+			transform: rotate(13deg);
+			width: 225px;
 		}
 		.listen:hover {
-			border: none;
 			opacity: 1;
 		}
 		h3 {
@@ -120,7 +115,10 @@ import { ListenService } from './listen.service';
 		}
 		#slider {
 			width: 100px;
-			margin: 15px 0 15px 15px;
+			margin: 0px 0 15px 10px;
+			padding: 0;
+			position: absolute;
+			top: 80px;
 		}
 	`]
 })
@@ -132,6 +130,7 @@ export class CardDetailComponent {
 	public song;
 	private songs = ["none", "daisies", "memories", "slowmotion"];
 	private songVolume;
+	public card = this.cardDetailService.card;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -156,7 +155,10 @@ export class CardDetailComponent {
 	}
 
 	deleteCard(card) {
-		this.userHomeService.deleteCard(card).subscribe();
+		this.route.params.forEach((params: Params) => {
+			let cardId = params['id'];
+			this.userHomeService.deleteCard(cardId).subscribe();
+		});
 		this.router.navigate(['/cards']);	
 	}
 
@@ -176,7 +178,7 @@ export class CardDetailComponent {
 	}
 
 	onSelect(contributor): void {
-		this.router.navigate(['/record', contributor._id]);
+		this.router.navigate(['/record', this.cardDetailService.card._id, contributor._id]);
 	}
 
 	removeContributor(contributor) {
@@ -191,6 +193,15 @@ export class CardDetailComponent {
 			let cardId = params['id'];
 			this.cardDetailService.setSong(song, cardId).subscribe();
 		});	
+	}
+
+	setVolume(evt) {
+		this.songVolume = evt.target.value * .10;
+		this.route.params.forEach((params: Params) => {
+			let cardId = params['id'];
+			this.cardDetailService.setVolume(this.songVolume, cardId).subscribe();
+		});
+
 	}
 
 	goListen() {

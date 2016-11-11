@@ -13,15 +13,39 @@ declare let BinaryClient: any;
 	template: `
 		<h1>Record Message</h1>
 
-		<button (click)='start()'>Start</button>
-		<button (click)='stop()'>Stop</button>
-		<button (click)='play()'>Play</button>
-
-		<a>{{hf}}</a>
-
-		<button class="go-back" (click)="goBack()">Done</button>
+		<div *ngIf="this.contributorService.contributor">
+			<h2>{{this.contributorService.contributor.name}}</h2>
+		</div>
 		
-	`
+		<div class="buttons">
+			<button (click)='start()'>Start</button>
+			<button (click)='stop()'>Stop</button>
+			<button (click)='play(message)'>Play</button>
+		</div>
+
+		<audio #message preload="auto" (canplay)="this.playTrue()"></audio>
+
+
+		<audio controls src="http://localhost:8000/58263ceaf51b7d1bc3c54e79" preload="auto"></audio>
+
+		<div class="back">
+			<button class="go-back" (click)="goBack()">Done</button>
+		</div>
+	`,
+	styles: [`
+		h1 {
+			margin-top: 100px;
+		}
+		.buttons {
+			margin-top: 140px;
+		}
+		.go-back {
+			margin: 150px auto 0 auto;
+		}
+		.back {
+			text-align: center;
+		}
+	`]
 })
 export class ContributorComponent {
 	private chunks: any[] = [];
@@ -31,6 +55,9 @@ export class ContributorComponent {
 	private Stream;
 	private recording = false;
 	private contributorId;
+	private link;
+	private cardId;
+	private canPlay = false;
 
 	constructor(
 		private contributorService: ContributorService,
@@ -44,13 +71,14 @@ export class ContributorComponent {
 	ngOnInit() {
 		this.route.params.forEach((params: Params) => {
 			this.contributorId = params['id'];
-			console.log(this.contributorId);
+			this.cardId = params['cardid'];
+			this.contributorService.getName(this.contributorId, this.cardId).subscribe();
+			this.link = "http://localhost:8000/" + this.contributorId;
 		});
 
 		let client = new BinaryClient('ws://localhost:9001');
 
 		client.on('open', () => {
-			console.log(this);
 			this.Stream = client.createStream({name: this.contributorId});
 		});
 
@@ -71,9 +99,9 @@ export class ContributorComponent {
 			navigator.getUserMedia({audio: true }, this.success.bind(this), function(e) {
 				alert('Error capturing audio.');
 			});
-			} else {
-				alert('getUserMedia not supported in this browser.');
-			}
+		} else {
+			alert('getUserMedia not supported in this browser.');
+		}
 	}
 
 	start() {
@@ -82,8 +110,11 @@ export class ContributorComponent {
 
 	stop() {
 		this.recording = false;
-		console.log(this);
 		this.Stream.end();
+		this.route.params.forEach((params: Params) => {
+			let contributorId = params['id'];
+			this.contributorService.addMessage(contributorId, this.cardId).subscribe();
+		});
 	}
 
 	recorderProcess(e) {
@@ -117,6 +148,18 @@ export class ContributorComponent {
 			buf[l] = Math.min(1, buffer[l]) * 0x7FFF;
 		}
 		return buf.buffer;
+	}
+
+	playTrue() {
+		console.log("hi");
+		this.canPlay = true;
+	}
+
+	play(message: HTMLAudioElement) {
+		console.log(message);
+		message.src = this.link;
+		message.load();
+		message.play();
 	}
 	
 

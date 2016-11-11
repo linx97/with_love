@@ -7,6 +7,7 @@ import { Card } from './card';
 export class CardDetailService {
 	public contributors: string[];
 	public card: Card;
+	public cardId;
 	public songFile;
 
 	constructor(private apiService: ApiService) {}
@@ -14,6 +15,7 @@ export class CardDetailService {
 	getCard(cardId) {
 		return this.apiService.getObs('/api/get-card/' + cardId).do((card) => {
 			this.card = card;
+			this.cardId = this.card._id;
 		});
 	}
 
@@ -35,6 +37,14 @@ export class CardDetailService {
 			song: this.songFile
 		}).do((card) => {
 			this.card.song = this.songFile;
+		});
+	}
+
+	setVolume(songVolume, cardId) {
+		return this.apiService.postObs("/api/set-volume/" + cardId, {
+			songVolume: songVolume
+		}).do((card) => {
+			this.card = card;
 		});
 	}
 

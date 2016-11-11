@@ -26,7 +26,7 @@ const WINDOW_PROVIDER: ValueProvider = {
 			{path: '', redirectTo: '/cards', pathMatch: 'full'},
 			{path: 'cards', component: UserHomeComponent },
 			{path: 'cards/:id', component: CardDetailComponent },
-			{path: 'record/:id', component: ContributorComponent },
+			{path: 'record/:cardid/:id', component: ContributorComponent },
 			{path: 'listen/:id', component: ListenComponent }
 		]) ],
 	declarations: [ AppComponent, UserHomeComponent, ContributorComponent, CardDetailComponent, ListenComponent, MusicSelector ],

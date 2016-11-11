@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 	template: `
 	<div>
 		<div class="holder">
-			<h2 *ngIf="finished && !this.userHomeService.cards">You haven't created any cards.</h2>
+			<h2 *ngIf="this.userHomeService.cards && this.userHomeService.cards.length === 0">You haven't created any cards.</h2>
 
 			<div class="card-div" 
 			*ngFor="let c of this.userHomeService.cards">
@@ -26,6 +26,10 @@ import { Router } from '@angular/router';
 			padding-left: 30px;
 			font-size: 2.3em;
 			font-weight: bold;
+		}
+		h2 {
+			margin: auto;
+
 		}
 		.holder {
 			margin: 45px -60px 25px 0;
@@ -104,8 +108,6 @@ export class UserHomeComponent {
 		contributors: []
 	};
 
-	private finished: boolean = false;
-
 	constructor(private userHomeService: UserHomeService, private router: Router) {}
 
 	onKeyUp(evt) {
@@ -116,14 +118,12 @@ export class UserHomeComponent {
 
 	ngOnInit(): void {
 		this.userHomeService.getCards().subscribe();
-		this.finished = true;
 	}
 
 	createNewCard() {
 		this.userHomeService.createNewCard(this.newCard).subscribe(() => {
 			this.userHomeService.getCards().subscribe();
 			this.newCard.title = "";
-			this.finished = true;
 		}) ;	
 	}
 

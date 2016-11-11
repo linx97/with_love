@@ -21,9 +21,9 @@ export class UserHomeService {
 		});
 	}	
 
-	deleteCard(card: Object) {
-		console.log(card);
-		return this.apiService.postObs("/api/delete-card", {card: card}).do((cards) => {
+	deleteCard(cardId) {
+		console.log(cardId);
+		return this.apiService.postObs("/api/delete-card", {cardId: cardId}).do((cards) => {
 			this.cards = cards;
 			this.getCards().subscribe();
 		});
