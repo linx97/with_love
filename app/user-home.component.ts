@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 	template: `
 	<div>
 		<div class="holder">
-			<h2 *ngIf="this.userHomeService.cards && this.userHomeService.cards.length === 0">You haven't created any cards.</h2>
+			<h2 *ngIf="this.userHomeService.cards && this.userHomeService.cards.length === 0">You haven't created any cards!</h2>
 
 			<div class="card-div" 
 			*ngFor="let c of this.userHomeService.cards">
@@ -28,8 +28,8 @@ import { Router } from '@angular/router';
 			font-weight: bold;
 		}
 		h2 {
-			margin: auto;
-
+			margin-top: 220px;
+			margin-left: 20%;
 		}
 		.holder {
 			margin: 45px -60px 25px 0;

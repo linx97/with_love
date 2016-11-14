@@ -5,21 +5,19 @@ import { Card } from './card';
 @Injectable()
 export class ListenService {
 	public card: Card;
-	public messageArray = [];
+	public messageSrcs = [];
 	
 	constructor(private apiService: ApiService) {}
 
 	getCard(cardId) {
 		return this.apiService.getObs('/api/get-card/' + cardId).do((card) => {
 			this.card = card;
-			for (let c of this.card.contributors) {
-				console.log(c);
-				// if (c.message) {
-				// 	let message = "http://localhost:8000/" + c._id + "\"";
-				// 	this.messageArray.push(c._id);
-				// 	console.log(this.messageArray);
-				// }
-			}
+		});
+	}
+
+	getMessages(cardId) {
+		return this.apiService.getObs('/api/get-messages/' + cardId).do((messages) => {
+			this.messageSrcs = messages;
 		});
 	}
 }

@@ -14,6 +14,7 @@ import { ListenService } from './listen.service';
 		<div class="holder">
 			<div *ngFor="let p of this.cardDetailService.card.contributors">
 				<h4 (click)="onSelect(p)">{{p.name}}</h4>
+				<p *ngIf="p.message" class="ready">ready!</p>
 				<img class="trash" src="../images/trash.svg" (click)="removeContributor(p)">
 			</div>
 		</div>
@@ -115,10 +116,16 @@ import { ListenService } from './listen.service';
 		}
 		#slider {
 			width: 100px;
-			margin: 0px 0 15px 10px;
+			margin: 15px 0 15px 10px;
 			padding: 0;
 			position: absolute;
-			top: 80px;
+			top: 88px;
+		}
+		.ready {
+			position: absolute;
+			right: 85px;
+			font-style: italic;
+			bottom: -8px;
 		}
 	`]
 })

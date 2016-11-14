@@ -13,7 +13,6 @@ export class MusicSelector {
 	private songs = ["none", "daisies", "memories", "slowmotion"];
 	public selectedValue;
 
-
 	ngOnInit() {
 		this.select.emit(this.songs[0]);
 		console.log(this.selectedValue);

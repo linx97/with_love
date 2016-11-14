@@ -20,13 +20,8 @@ declare let BinaryClient: any;
 		<div class="buttons">
 			<button (click)='start()'>Start</button>
 			<button (click)='stop()'>Stop</button>
-			<button (click)='play(message)'>Play</button>
+			<button (click)='play()'>Play</button>
 		</div>
-
-		<audio #message preload="auto" (canplay)="this.playTrue()"></audio>
-
-
-		<audio controls src="http://localhost:8000/58263ceaf51b7d1bc3c54e79" preload="auto"></audio>
 
 		<div class="back">
 			<button class="go-back" (click)="goBack()">Done</button>
@@ -75,6 +70,9 @@ export class ContributorComponent {
 			this.contributorService.getName(this.contributorId, this.cardId).subscribe();
 			this.link = "http://localhost:8000/" + this.contributorId;
 		});
+	}
+
+	start() {
 
 		let client = new BinaryClient('ws://localhost:9001');
 
@@ -102,9 +100,7 @@ export class ContributorComponent {
 		} else {
 			alert('getUserMedia not supported in this browser.');
 		}
-	}
 
-	start() {
 		this.recording = true;
 	}
 
@@ -150,15 +146,11 @@ export class ContributorComponent {
 		return buf.buffer;
 	}
 
-	playTrue() {
-		console.log("hi");
-		this.canPlay = true;
-	}
-
-	play(message: HTMLAudioElement) {
-		console.log(message);
-		message.src = this.link;
+	play() {
+		let message = new Audio();
+		message.setAttribute('src', this.link);
 		message.load();
+		console.log(message);
 		message.play();
 	}
 	

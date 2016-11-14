@@ -5,27 +5,38 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 @Component({
 	selector: 'listen',
 	template: `
-		<h1>Play Your Greeting!</h1>
+		<div class="full-screen">
 
-		<img src="../images/play.svg" (click)="playMusic(audioEl)"> 
-		
-		<div *ngIf="this.listenService.card && this.listenService.card.song">
-			<audio #audioEl controls [src]="this.listenService.card.song" [volume]="this.listenService.card.songVolume"></audio>
-		</div>
-
-		<div *ngIf="this.listenService.card && this.listenService.messageArray">
-			<div *ngFor="let i of this.listenService.messageArray">
-				<audio controls [src]="i"></audio>
+			<div *ngIf="this.listenService.card">
+				<h1>{{this.listenService.card.title}}</h1>
 			</div>
-		</div>
 
-		<audio id="audio1" controls src="http://localhost:8000/5824da125114f11c68c610da"></audio>
-		<audio id="audio2" controls src="http://localhost:8000/58250fbfa0b29502a137c18b"></audio>
-		<audio id="audio2" controls src="http://localhost:8000/5825e3c67538be0a9d60885a"></audio>
+			<img src="../images/play.png" (click)="playAudio()"> 
+		</div>
 	`,
 	styles: [`
+		.full-screen {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(330deg, #605B7F 0%, #7E6086 50%, #5C667F 100%);
+			opacity: 0.8;
+			top: 0;
+			left: 0;
+			text-align: center;
+			overflow: hidden;
+		}
+		.balloon {
+			position: absolute;
+		}		
+		h1 {
+			font-family: 'Tornac Trial', sans-serif;
+			font-size: 4em;
+			color: white;
+		}
 		img {
-			width: 30%;
+			margin-top: 25px;
+			width: 29%;
 		}
 	`]
 })
@@ -41,11 +52,12 @@ export class ListenComponent {
 
 	ngOnInit() {
 		this.getCard();
-
+		this.getMessages();
 	}
 
-	playMusic(el: HTMLAudioElement) {
-		el.play();
+	playAudio() {
+		this.playBackgroundMusic();
+		this.loopMessages();
 	}
 
 	getCard() {
@@ -55,7 +67,43 @@ export class ListenComponent {
 		});	
 	}
 
-	loopMessages() {
-
+	getMessages() {
+		this.route.params.forEach((params: Params) => {
+			let cardId = params['id'];
+			this.listenService.getMessages(cardId).subscribe();
+		});	
 	}
+
+	playBackgroundMusic() {
+		if (this.listenService.card && this.listenService.card.song) {
+			let song = new Audio();
+			song.src = this.listenService.card.song;
+			song.volume = this.listenService.card.songVolume;
+			song.load();
+			song.play();
+		}
+	}
+
+	loopMessages() {
+		if (this.listenService.card && this.listenService.messageSrcs) {
+			let message = new Audio();
+			message.setAttribute('src', this.listenService.messageSrcs[0]);
+			message.load();
+			setTimeout(function() { message.play(); }, 5000);
+			if (this.listenService.messageSrcs.length > 1) {
+				for (let i = 1; i < this.listenService.messageSrcs.length; i++) {
+					console.log(this.listenService.messageSrcs.length);
+					if (this.listenService.messageSrcs[i + 1]) {
+						message.addEventListener("ended", () => {
+							message.setAttribute('src', this.listenService.messageSrcs[i]);
+							console.log(message);
+							message.load();
+							setTimeout(function() { message.play(); }, 3000);
+						});
+					}
+				}
+			}			
+		}
+	}
+
 }
