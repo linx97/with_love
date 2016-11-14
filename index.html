@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Catamaran" rel="stylesheet">
+    <link rel="stylesheet" href="animate.css">
     <link rel="stylesheet" href="styles.css">
     <!-- 1. Load libraries -->
      <!-- Polyfill(s) for older browsers -->
@@ -16,6 +17,7 @@
     <script src="systemjs.config.js"></script>
     <script src="./binary.js"></script>
     <script src="//www.WebRTC-Experiment.com/RecordRTC.js"></script>
+    <script src="./script.js"></script>
     <script>
       System.import('app').catch(function(err){ console.error(err); });
     </script>
@@ -24,5 +26,6 @@
   <!-- 3. Display the application -->
   <body>
     <my-app>Loading...</my-app>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
   </body>
 </html>

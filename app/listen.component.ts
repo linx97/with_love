@@ -75,34 +75,47 @@ export class ListenComponent {
 	}
 
 	playBackgroundMusic() {
+		
+	}
+
+
+
+	loopMessages() {
+		let song = new Audio();
+
 		if (this.listenService.card && this.listenService.card.song) {
-			let song = new Audio();
 			song.src = this.listenService.card.song;
 			song.volume = this.listenService.card.songVolume;
 			song.load();
 			song.play();
 		}
-	}
 
-	loopMessages() {
 		if (this.listenService.card && this.listenService.messageSrcs) {
 			let message = new Audio();
 			message.setAttribute('src', this.listenService.messageSrcs[0]);
 			message.load();
-			setTimeout(function() { message.play(); }, 5000);
-			if (this.listenService.messageSrcs.length > 1) {
-				for (let i = 1; i < this.listenService.messageSrcs.length; i++) {
-					console.log(this.listenService.messageSrcs.length);
-					if (this.listenService.messageSrcs[i + 1]) {
-						message.addEventListener("ended", () => {
-							message.setAttribute('src', this.listenService.messageSrcs[i]);
-							console.log(message);
-							message.load();
-							setTimeout(function() { message.play(); }, 3000);
-						});
-					}
+			setTimeout(function() { message.play(); }, 2000);
+			let i = 0;
+
+			
+		if (this.listenService.messageSrcs.length > 1) {
+				message.addEventListener("ended", () => {
+					console.log(message);
+					let a = setInterval(() => {					
+				i++;
+				console.log(i);
+				if (i < this.listenService.messageSrcs.length) {
+					message.setAttribute('src', this.listenService.messageSrcs[i]);
+					message.load();
+					message.play();
+				} else {
+					clearInterval(a);
+					setTimeout(function() { song.pause(); }, 2000);
 				}
-			}			
+					}, Math.floor((message.duration) * 1000) + 1000) ;
+				});
+			}
+
 		}
 	}
 

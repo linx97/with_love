@@ -99,6 +99,7 @@ import { ListenService } from './listen.service';
 		}
 		.listen:hover {
 			opacity: 1;
+			animation: 1 zoom;
 		}
 		h3 {
 			position: absolute;
@@ -126,6 +127,14 @@ import { ListenService } from './listen.service';
 			right: 85px;
 			font-style: italic;
 			bottom: -8px;
+		}
+		@keyframes zoom {
+			from {
+				width: 225px;
+			}
+			to {
+				width: 240px;
+			}
 		}
 	`]
 })
