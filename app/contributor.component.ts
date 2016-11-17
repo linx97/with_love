@@ -18,8 +18,8 @@ declare let BinaryClient: any;
 		</div>
 		
 		<div class="buttons">
-			<button (click)='start()'>Start</button>
-			<button (click)='stop()'>Stop</button>
+			<button (click)='start()'>Start Recording</button>
+			<button (click)='stop()'>Stop Recording</button>
 			<button (click)='play()'>Play</button>
 		</div>
 
@@ -57,6 +57,7 @@ export class ContributorComponent {
 	private link;
 	private cardId;
 	private canPlay = false;
+	private message = new Audio();
 
 	constructor(
 		private contributorService: ContributorService,
@@ -151,13 +152,15 @@ export class ContributorComponent {
 	}
 
 	play() {
-		let message = new Audio();
-		message.setAttribute('src', this.link);
-		message.load();
-		console.log(message);
-		message.play();
+		this.message.setAttribute('src', this.link);
+		this.message.load();
+		console.log(this.message);
+		this.message.play();
 	}
 	
+	ngOnDestroy() {
+		this.message.pause();
+	}
 
 	goBack() {
 		this.location.back();

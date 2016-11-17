@@ -2,7 +2,6 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 import { ListenService } from './listen.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Location } from '@angular/common';
-declare var $: any;
 
 @Component({
 	selector: 'listen',
@@ -57,21 +56,8 @@ declare var $: any;
 		img:hover {
 			opacity: 1;
 		}
-		img::after {
-			content: '';
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			margin: -35px 0 0 -35px;
-			width: 200px;
-			height: 200px;
-			border-radius: 50%;
-			opacity: 0;
-			pointer-events: none;
-		}
-		.clicked, img:focus {
-			outline: none;
-			color: #3c8ddc;
+		.clicked {
+			animation: grow 1s linear 1;
 		}
 		p {
 			color: #fff;
@@ -86,7 +72,17 @@ declare var $: any;
 			opacity: 1;
 			cursor:pointer;
 		}
-
+		@keyframes grow {
+			0% {
+				width: 29%;
+			}
+			40% {
+				width: 30%;
+			}
+			100% {
+				width: 29%;
+			}
+		}
 	`]
 })
 export class ListenComponent implements OnInit {
@@ -94,6 +90,7 @@ export class ListenComponent implements OnInit {
 	private messageArray;
 	private class = false;
 	private stop = 0;
+	private audios = [];
 
 	constructor(
 		private listenService: ListenService, 
@@ -141,6 +138,7 @@ export class ListenComponent implements OnInit {
 
 	loopMessages() {
 		let song = new Audio();
+		this.audios.push(song);
 
 		if (this.listenService.card && this.listenService.card.song) {
 			song.src = this.listenService.card.song;
@@ -154,6 +152,7 @@ export class ListenComponent implements OnInit {
 
 		if (this.listenService.card && this.listenService.messageSrcs) {
 			let message = new Audio();
+			this.audios.push(message);
 			message.setAttribute('src', this.listenService.messageSrcs[0]);
 			message.load();
 			setTimeout(function() { message.play(); }, 4000);
@@ -260,6 +259,17 @@ export class ListenComponent implements OnInit {
 			new Balloon();
 		}
 	};
+
+	ngOnDestroy() {
+		let balloons: any = document.getElementsByClassName("balloon");
+		console.log(balloons);
+		while (balloons[0]) {
+			balloons[0].parentNode.removeChild(balloons[0]);
+		}
+		for (let i of this.audios) {
+			i.pause();
+		}
+	}
 
 	goBack() {
 		this.location.back();

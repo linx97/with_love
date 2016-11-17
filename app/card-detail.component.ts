@@ -25,7 +25,7 @@ import { ListenService } from './listen.service';
 			<div>
 				Background Music: 
 				<select (change)="setSong($event.target.value)">
-					<option *ngFor="let song of songs" [value]="song">{{song}}</option>
+					<option *ngFor="let song of songs" [value]="song" [attr.selected]="this.cardDetailService.card.song === song">{{song}}</option>
 				</select>
 				Volume:
 				<input id="slider" type="range" min="1" max="9" step="1" (change)="setVolume($event)" />
