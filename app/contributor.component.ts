@@ -31,8 +31,12 @@ declare let BinaryClient: any;
 		h1 {
 			margin-top: 100px;
 		}
+		h2 {
+			font-family: 'Tornac Trial', sans-serif;
+			font-size: 2em;
+		}
 		.buttons {
-			margin-top: 140px;
+			margin-top: 110px;
 		}
 		.go-back {
 			margin: 150px auto 0 auto;

@@ -69,6 +69,9 @@ import { ListenService } from './listen.service';
 			margin: 5px 0 5px 30px;
 			font-size: 1.4em;
 		}
+		h4:hover {
+			opacity: 0.8;
+		}
 		.buttons {
 			margin-right: 80px;
 			font-size: 1.2em;
@@ -93,13 +96,20 @@ import { ListenService } from './listen.service';
 			position: absolute;
 			opacity: 0.8;
 			bottom: 35px;
-			right: 35px;
-			transform: rotate(13deg);
+			right: 38px;
 			width: 225px;
+			-webkit-transform: perspective(1px) translateZ(0);
+			transform: perspective(1px) translateZ(0);
+			-webkit-transition-duration: 0.3s;
+			transition-duration: 0.3s;
+			-webkit-transition-property: transform;
+			transition-property: transform;
+			transform: rotate(11deg);
 		}
 		.listen:hover {
 			opacity: 1;
-			animation: 1 zoom;
+			-webkit-transform: scale(1.1) rotate(4deg);
+			transform: scale(1.1) rotate(4deg);
 		}
 		h3 {
 			position: absolute;
@@ -128,14 +138,6 @@ import { ListenService } from './listen.service';
 			font-style: italic;
 			bottom: -8px;
 		}
-		@keyframes zoom {
-			from {
-				width: 225px;
-			}
-			to {
-				width: 240px;
-			}
-		}
 	`]
 })
 export class CardDetailComponent {	
@@ -144,7 +146,7 @@ export class CardDetailComponent {
 		message: {}
 	};
 	public song;
-	private songs = ["none", "daisies", "memories", "slowmotion"];
+	private songs = ["none", "daisies", "memories", "slowmotion", "tiger", "energy", "buddy", "breeze"];
 	private songVolume;
 	public card = this.cardDetailService.card;
 
